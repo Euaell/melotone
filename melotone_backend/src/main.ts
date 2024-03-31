@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import helmet from 'helmet';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -20,6 +21,9 @@ async function bootstrap() {
 
     // use class-validator for validation
     app.useGlobalPipes(new ValidationPipe());
+
+    // use helmet for security
+    app.use(helmet());
 
     await app.listen(3000);
 }
