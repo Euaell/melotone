@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsUUID } from 'class-validator';
+
 export class CreateHandDto {
     @IsNotEmpty()
     name: string;

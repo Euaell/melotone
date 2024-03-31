@@ -22,7 +22,6 @@ export class HandsService {
     ) {}
 
     async create(hand: CreateHandDto): Promise<IHand | undefined> {
-        // Save the hand object to the database
         return this.handsRepository.save(hand);
     }
 
