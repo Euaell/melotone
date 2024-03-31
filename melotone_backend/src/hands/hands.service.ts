@@ -1,58 +1,59 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import  { IHand } from "./hands.interface";
 import { CreateHandDto, UpdateHandDto } from "./hands.dto";
-import { UUID, randomUUID } from "crypto";
+import { UUID } from "crypto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Hands } from "./hands.entity";
+import { FindOperator, Repository } from "typeorm";
+import { Equal } from "typeorm";
+
+function convertToTypeORMUUID(id: UUID | string) {
+    return Equal(id.toString()) as FindOperator<`${string}-${string}-${string}-${string}-${string}`>;
+}
 
 @Injectable()
 export class HandsService {
-    private hands: IHand[] = [];
+    private readonly logger = new Logger(HandsService.name);
+    constructor(
+        @InjectRepository(Hands)
+        private handsRepository: Repository<Hands>,
+    ) {}
 
-    create(hand: CreateHandDto): IHand {
-        // Create a new hand object
-        const newHand: IHand = {
-            id: randomUUID(),
-            ...hand,
-        };
-        // Add the new hand object to the array
-        this.hands.push(newHand);
-        // Return the new hand object
-        return newHand;
+    async create(hand: CreateHandDto): Promise<IHand | undefined> {
+        // Save the hand object to the database
+        return this.handsRepository.save(hand);
     }
 
-    findAll(): IHand[] {
-        return this.hands;
+    findAll(): Promise<IHand[]> {
+        return this.handsRepository.find();
     }
 
-    findOne(id: UUID | string): IHand | undefined {
-        if (typeof id === "string") {
-            id = id as UUID;
-        }
-        return this.hands.find((hand) => hand.id === id);
+    findOne(id: UUID | string): Promise<IHand | undefined> {
+        return this.handsRepository.findOne({ where: { id: convertToTypeORMUUID(id) }});
     }
 
-    update(id: UUID | string, hand: UpdateHandDto): IHand | undefined {
+    async update(id: UUID | string, hand: UpdateHandDto): Promise<IHand | undefined> {
 
-        if (typeof id === "string") {
-            id = id as UUID;
-        }
-        const index = this.hands.findIndex((hand) => hand.id === id);
-        if (index === -1) {
+        // Find the hand with the given id
+        const handToUpdate = await this.handsRepository.findOne({ where: { id: convertToTypeORMUUID(id) } });
+        if (!handToUpdate) {
             return undefined;
         }
+        // Update the hand object with the new hand object
+        this.handsRepository.merge(handToUpdate, hand);
 
-        this.hands[index] = {
-            id: id as UUID,
-            ...hand,
-        };
-        return this.hands[index];
+        await this.handsRepository.save(handToUpdate);
+        return handToUpdate;
     }
 
-    remove(id: UUID | string): boolean {
-        if (typeof id === "string") {
-            id = id as UUID;
+    async remove(id: UUID | string): Promise<boolean> {
+        // Find the hand with the given id
+        const handToRemove = await this.handsRepository.findOne({ where: { id: convertToTypeORMUUID(id) } });
+        if (!handToRemove) {
+            return false;
         }
-        const preLength = this.hands.length;
-        this.hands = this.hands.filter((hand) => hand.id !== id);
-        return this.hands.length < preLength;
+        // Remove the hand object
+        await this.handsRepository.remove(handToRemove);
+        return true;
     }
 }

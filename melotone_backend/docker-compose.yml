@@ -9,7 +9,7 @@ services:
     environment:
       POSTGRES_USER: geek
       POSTGRES_PASSWORD: 123456789
-      POSTGRES_DB: melotone
+      POSTGRES_DB: melotone_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
