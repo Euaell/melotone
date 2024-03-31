@@ -1,0 +1,17 @@
+version: '1.0.1'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: melotone_db
+    ports:
+      - "5415:5432"
+    environment:
+      POSTGRES_USER: geek
+      POSTGRES_PASSWORD: 123456789
+      POSTGRES_DB: melotone
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
