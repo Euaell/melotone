@@ -10,7 +10,12 @@ import {
     HttpStatus,
     Logger,
 } from '@nestjs/common';
-import { CreateHandDto, UpdateHandDto, HandResponseDto, HandsResponseDto } from './hands.dto';
+import {
+    CreateHandDto,
+    UpdateHandDto,
+    HandResponseDto,
+    HandsResponseDto,
+} from './hands.dto';
 import { HandsService } from './hands.service';
 
 @Controller('hands')
@@ -30,12 +35,14 @@ export class HandsController {
     @HttpCode(HttpStatus.OK)
     async getHand(@Param('id') id: string): Promise<HandResponseDto> {
         const hand = await this.handService.findOne(id);
-        return { hand };        
+        return { hand };
     }
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    async createHand(@Body() createHandDto: CreateHandDto): Promise<HandResponseDto> {
+    async createHand(
+        @Body() createHandDto: CreateHandDto,
+    ): Promise<HandResponseDto> {
         const hand = await this.handService.create(createHandDto);
         return { hand };
     }

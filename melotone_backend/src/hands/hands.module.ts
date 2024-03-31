@@ -8,6 +8,6 @@ import { Hands } from './hands.entity';
     imports: [TypeOrmModule.forFeature([Hands])],
     controllers: [HandsController],
     providers: [HandsService],
-    exports: []
+    exports: [],
 })
 export class HandsModule {}

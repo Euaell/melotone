@@ -25,6 +25,10 @@ async function bootstrap() {
     // use helmet for security
     app.use(helmet());
 
+    // enable cors
+    app.enableCors();
+
+    // start the app
     await app.listen(3000);
 }
 bootstrap();

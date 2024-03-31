@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { HandsModule } from './hands/hands.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Hands } from './hands/hands.entity';
 
 const typeOrmModule = TypeOrmModule.forRoot({
     type: 'postgres',
@@ -11,7 +10,6 @@ const typeOrmModule = TypeOrmModule.forRoot({
     password: '123456789',
     database: 'melotone_db',
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    // entities: [Hands],
     // autoLoadEntities: true,
     synchronize: true,
 });

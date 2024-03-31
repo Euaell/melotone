@@ -1,14 +1,16 @@
-import { Injectable, Logger } from "@nestjs/common";
-import  { IHand } from "./hands.interface";
-import { CreateHandDto, UpdateHandDto } from "./hands.dto";
-import { UUID } from "crypto";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Hands } from "./hands.entity";
-import { FindOperator, Repository } from "typeorm";
-import { Equal } from "typeorm";
+import { Injectable, Logger } from '@nestjs/common';
+import { IHand } from './hands.interface';
+import { CreateHandDto, UpdateHandDto } from './hands.dto';
+import { UUID } from 'crypto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Hands } from './hands.entity';
+import { FindOperator, Repository } from 'typeorm';
+import { Equal } from 'typeorm';
 
 function convertToTypeORMUUID(id: UUID | string) {
-    return Equal(id.toString()) as FindOperator<`${string}-${string}-${string}-${string}-${string}`>;
+    return Equal(
+        id.toString(),
+    ) as FindOperator<`${string}-${string}-${string}-${string}-${string}`>;
 }
 
 @Injectable()
@@ -29,13 +31,19 @@ export class HandsService {
     }
 
     findOne(id: UUID | string): Promise<IHand | undefined> {
-        return this.handsRepository.findOne({ where: { id: convertToTypeORMUUID(id) }});
+        return this.handsRepository.findOne({
+            where: { id: convertToTypeORMUUID(id) },
+        });
     }
 
-    async update(id: UUID | string, hand: UpdateHandDto): Promise<IHand | undefined> {
-
+    async update(
+        id: UUID | string,
+        hand: UpdateHandDto,
+    ): Promise<IHand | undefined> {
         // Find the hand with the given id
-        const handToUpdate = await this.handsRepository.findOne({ where: { id: convertToTypeORMUUID(id) } });
+        const handToUpdate = await this.handsRepository.findOne({
+            where: { id: convertToTypeORMUUID(id) },
+        });
         if (!handToUpdate) {
             return undefined;
         }
@@ -48,7 +56,9 @@ export class HandsService {
 
     async remove(id: UUID | string): Promise<boolean> {
         // Find the hand with the given id
-        const handToRemove = await this.handsRepository.findOne({ where: { id: convertToTypeORMUUID(id) } });
+        const handToRemove = await this.handsRepository.findOne({
+            where: { id: convertToTypeORMUUID(id) },
+        });
         if (!handToRemove) {
             return false;
         }

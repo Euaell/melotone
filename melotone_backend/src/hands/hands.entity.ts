@@ -1,5 +1,5 @@
 import { UUID } from 'crypto';
-import {Entity, PrimaryGeneratedColumn, Column} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Hands {
@@ -8,4 +8,4 @@ export class Hands {
 
     @Column({ unique: true, length: 50 })
     name: string;
-} 
+}
