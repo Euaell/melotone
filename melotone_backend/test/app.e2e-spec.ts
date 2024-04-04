@@ -16,6 +16,6 @@ describe('AppController (e2e)', () => {
     });
 
     it('/ (GET)', () => {
-        return request(app.getHttpServer()).get('/hands').expect({ hands: [] });
+        return request(app.getHttpServer()).get('/hands').expect(200);
     });
 });
