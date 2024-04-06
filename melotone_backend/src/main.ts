@@ -4,7 +4,8 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
-import cookieParser from 'cookie-parser';
+import * as cookieParser from 'cookie-parser';
+import { TypeOrmExceptionFilter } from './exception';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -30,6 +31,9 @@ async function bootstrap() {
 
     // enable cors
     app.enableCors();
+
+    // set up a database error handling middleware
+    app.useGlobalFilters(new TypeOrmExceptionFilter());
 
     // start the app
     await app.listen(3000);

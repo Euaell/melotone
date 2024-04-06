@@ -4,8 +4,7 @@ import { CreateHandDto, UpdateHandDto } from './hands.dto';
 import { UUID } from 'crypto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hands } from './hands.entity';
-import { FindOperator, Repository } from 'typeorm';
-import { Equal } from 'typeorm';
+import { Equal, FindOperator, Repository } from 'typeorm';
 
 function convertToTypeORMUUID(id: UUID | string) {
     return Equal(
@@ -21,7 +20,7 @@ export class HandsService {
         private handsRepository: Repository<Hands>,
     ) {}
 
-    async create(hand: CreateHandDto): Promise<IHand | undefined> {
+    create(hand: CreateHandDto): Promise<IHand | undefined> {
         return this.handsRepository.save(hand);
     }
 
